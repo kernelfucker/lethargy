@@ -7,6 +7,8 @@
 #include <termios.h>
 #include <crypt.h>
 
+#define version "0.2"
+
 void read_passwd(char *buf, size_t s){
 	struct termios o, n;
 	tcgetattr(STDIN_FILENO, &o);
@@ -42,7 +44,30 @@ void yescrypt_last(const char *passwd){
 	printf("yescrypt hash: %s\n", hash);
 }
 
-int main(){
+void help(const char *lethargy){
+	printf("usage: %s [options]..\n", lethargy);
+	printf("options:\n");
+	printf("  -v	show version information\n");
+	printf("  -h	display this\n");
+	exit(1);
+}
+
+void show_version(){
+	printf("lethargy-%s\n", version);
+	exit(1);
+}
+
+int main(int argc, char **argv){
+	if(argc == 2){
+		if(strcmp(argv[1], "-h") == 0){
+			help(argv[0]);
+		}
+
+		if(strcmp(argv[1], "-v") == 0){
+			show_version();
+		}
+	}
+
 	char passwd[256];
 	read_passwd(passwd, sizeof(passwd));
 	yescrypt_last(passwd);
