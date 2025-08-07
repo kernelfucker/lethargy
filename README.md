@@ -8,4 +8,4 @@ $ clang lethargy.c -o lethargy -Os -s -lcrypt
 $ ./lethargy
 
 # example
-<img width="1085" height="175" alt="image" src="https://github.com/user-attachments/assets/967e1b33-c648-49b8-8a27-7624d2ae5aea" />
+<img width="790" height="165" alt="image" src="https://github.com/user-attachments/assets/2f437cad-680e-456a-ba2e-e8a1e03f2881" />
