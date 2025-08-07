@@ -17,7 +17,7 @@ void read_passwd(char *buf, size_t s){
 	tcsetattr(STDIN_FILENO, TCSANOW, &n);
 	printf("passwd: "); fflush(stdout);
 	if(!fgets(buf, s, stdin)){
-		fprintf(stderr, "failed to read passwd\n");
+		fprintf(stderr, "lethargy: failed to read passwd\n");
 		tcsetattr(STDIN_FILENO, TCSANOW, &o);
 		exit(1);
 	}
