@@ -5,7 +5,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <termios.h>
-#include <fcntl.h>
 #include <crypt.h>
 
 #define version "0.2"
@@ -29,7 +28,7 @@ void read_passwd(char *buf, size_t s){
 }
 
 void yescrypt_last(const char *passwd){
-	char *sl = (char *)crypt_gensalt("$y$j9T$", 0, NULL, 0);
+	char *sl = crypt_gensalt("$y$", 0, NULL, 0);
 	if(!sl){
 		fprintf(stderr, "lethargy: crypt_gensalt failed\n");
 		exit(1);
