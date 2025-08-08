@@ -63,7 +63,7 @@ void yescrypt_last(const char *passwd){
 	yescrypt_salt(sl, sizeof(sl));
 	char *hs = crypt(passwd, sl);
 	if(!hs){
-		fprintf(stderr, "crypt failed\n");
+		fprintf(stderr, "lethargy: crypt failed\n");
 		exit(1);
 	}
 
