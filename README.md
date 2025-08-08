@@ -2,7 +2,7 @@
 yescrypt passwd hasher
 
 # compile
-$ clang lethargy.c -o lethargy -Os -s -lcrypt
+$ clang lethargy.c -o lethargy -Wall -Werror -Os -s -lcrypt
 
 # usage
 $ ./lethargy
