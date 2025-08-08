@@ -27,16 +27,43 @@ void read_passwd(char *buf, size_t s){
 	printf("\n");
 }
 
-void yescrypt_last(const char *passwd){
-	char *sl = crypt_gensalt("$y$", 0, NULL, 0);
-	if(!sl){
-		fprintf(stderr, "lethargy: crypt_gensalt failed\n");
-		exit(1);
+void secure_wipe(unsigned char *s, size_t l){
+	volatile unsigned char *p = s;
+	while(l--) *p++ = 0;
+	__asm__ __volatile__("" : : "r"(s) : "memory");
+}
+
+void yescrypt_salt(char *salt, size_t size){
+	const char *pr = "$y$j9T$";
+	unsigned char rb[32];
+	char hex_salt[65];
+	if(getentropy(rb, sizeof(rb)) != 0){
+		perror("lethargy: genentropy failed");
+		exit(EXIT_FAILURE);
 	}
 
+	for(int i = 0; i < (int)sizeof(rb); i++){
+		sprintf(hex_salt + i * 2, "%02x", rb[i]);
+	}
+
+	hex_salt[64] = '\0';
+	if(snprintf(salt, size, "%s%s", pr, hex_salt) >= (int)size){
+		fprintf(stderr, "lethargy: salt buffer too tiny\n");
+		secure_wipe(rb, sizeof(rb));
+		secure_wipe((unsigned char *)hex_salt, sizeof(hex_salt));
+		exit(EXIT_FAILURE);
+	}
+
+	secure_wipe(rb, sizeof(rb));
+	secure_wipe((unsigned char *)hex_salt, sizeof(hex_salt));
+}
+
+void yescrypt_last(const char *passwd){
+	char sl[72];
+	yescrypt_salt(sl, sizeof(sl));
 	char *hs = crypt(passwd, sl);
 	if(!hs){
-		fprintf(stderr, "lethargy: crypt failed\n");
+		fprintf(stderr, "crypt failed\n");
 		exit(1);
 	}
 
